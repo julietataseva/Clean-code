@@ -1,6 +1,6 @@
-package com.juli;
+package bg.sofia.uni.fmi.cleancode.ninemensmorris;
 
-import com.juli.enums.Position;
+import bg.sofia.uni.fmi.cleancode.ninemensmorris.enums.Position;
 
 public class Board {
     private final int BOARD_SIZE = 7;

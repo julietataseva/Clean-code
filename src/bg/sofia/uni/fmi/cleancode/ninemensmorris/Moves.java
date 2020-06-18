@@ -1,4 +1,4 @@
-package com.juli;
+package bg.sofia.uni.fmi.cleancode.ninemensmorris;
 
 
 import java.util.Scanner;

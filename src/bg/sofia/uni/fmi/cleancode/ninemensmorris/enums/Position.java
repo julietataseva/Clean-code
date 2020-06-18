@@ -1,4 +1,4 @@
-package com.juli.enums;
+package bg.sofia.uni.fmi.cleancode.ninemensmorris.enums;
 
 public enum Position {
     UNAVAILABLE(-1),

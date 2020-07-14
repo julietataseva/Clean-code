@@ -15,4 +15,15 @@ public enum Position {
     public int getValue() {
         return value;
     }
+
+    public char getPiece() {
+        switch (this) {
+            case OCCUPIED_BY_WHITE_PLAYER:
+                return '○';
+            case OCCUPIED_BY_BLACK_PLAYER:
+                return '●';
+            default:
+                return '·';
+        }
+    }
 }

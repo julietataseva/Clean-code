@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.cleancode.ninemensmorris;
 
+import bg.sofia.uni.fmi.cleancode.ninemensmorris.enums.Colour;
+
 import java.util.Scanner;
 
 public class Player {
@@ -7,9 +9,9 @@ public class Player {
 
     private int unplacedPieces;
     private int piecesOnBoard;
-    private String piecesColour;
+    private Colour piecesColour;
 
-    public Player(String piecesColour) {
+    public Player(Colour piecesColour) {
         unplacedPieces = MAX_PIECES;
         piecesOnBoard = 0;
         this.piecesColour = piecesColour;
@@ -32,9 +34,11 @@ public class Player {
         this.piecesOnBoard = piecesOnBoard;
     }
 
-    public String getPiecesColour() {
+    public Colour getPiecesColour() {
         return piecesColour;
     }
 
-
+    public boolean canFly() {
+        return piecesOnBoard == 3 && unplacedPieces == 0;
+    }
 }

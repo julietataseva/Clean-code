@@ -11,6 +11,7 @@ public class Game {
 
     public void play() {
         moves.placingPieces();
+        moves.movingPieces();
+        moves.flying();
     }
-
 }

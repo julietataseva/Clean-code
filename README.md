@@ -42,7 +42,7 @@ This is what an empty checkers board looks like, printed on a console.
 
 - A place not occupied by a piece is marked with: `·`
 - White checkers are marked with the special symbol: `○`
-- Black checkers are marked with: `●`
+- Black checkers are marked with the special symbol: `●`
 - The horizontal lines along which the checkers can move are marked with dashes: `-`
 - The vertical lines along which the checkers can move are marked with: `|`
 

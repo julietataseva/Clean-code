@@ -2,8 +2,6 @@ package bg.sofia.uni.fmi.cleancode.ninemensmorris;
 
 import bg.sofia.uni.fmi.cleancode.ninemensmorris.enums.Colour;
 
-import java.util.Scanner;
-
 public class Player {
     private final int MAX_PIECES = 9;
 

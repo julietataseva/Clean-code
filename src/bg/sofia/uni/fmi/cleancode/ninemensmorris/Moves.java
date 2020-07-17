@@ -51,8 +51,7 @@ public class Moves {
             if (firstPlayer.canFly()) {
                 while (!secondPlayer.canFly()) {
                     System.out.println(firstPlayer.getPiecesColour() + " player turn.");
-                    String position = enterPosition();
-                    fly(position, firstPlayer);
+                    movePiece(firstPlayer);
 
                     if (secondPlayer.canFly()) {
                         break;
@@ -67,8 +66,7 @@ public class Moves {
                     movePiece(firstPlayer);
 
                     System.out.println(secondPlayer.getPiecesColour() + " player turn.");
-                    String position = enterPosition();
-                    fly(position, secondPlayer);
+                    movePiece(secondPlayer);
 
                     if (firstPlayer.canFly()) {
                         break;
@@ -76,16 +74,14 @@ public class Moves {
                 }
             }
             System.out.println(firstPlayer.getPiecesColour() + " player turn.");
-            String position1 = enterPosition();
-            fly(position1, firstPlayer);
+            movePiece(firstPlayer);
 
             if (secondPlayer.getPiecesOnBoard() < 3) {
                 winner(firstPlayer);
             }
 
             System.out.println(secondPlayer.getPiecesColour() + " player turn.");
-            String position2 = enterPosition();
-            fly(position2, secondPlayer);
+            movePiece(secondPlayer);
 
             if (firstPlayer.getPiecesOnBoard() < 3) {
                 winner(secondPlayer);
@@ -96,6 +92,10 @@ public class Moves {
     private void placePiece(Player player) {
         while (true) {
             char[] position = enterPosition().toCharArray();
+            if (position.length != 2) {
+                System.out.println("Invalid input. Please try again.");
+                continue;
+            }
 
             if (!board.isValidPosition(position)) {
                 System.out.println("This position is invalid! Please choose a valid one.");
@@ -133,11 +133,10 @@ public class Moves {
 
     private void movePiece(Player player) {
         while (true) {
-            System.out.println("Choose which piece to move. ");
+            System.out.println("Choose which piece to move and where to move it (for example: A1A4)");
             String position = enterPosition();
-
-            if (!board.isAdjacentPosition(position)) {
-                System.out.println("This position is not adjacent! Please choose adjacent position.");
+            if (position.length() != 4) {
+                System.out.println("Invalid input. Please try again.");
                 continue;
             }
 
@@ -149,13 +148,28 @@ public class Moves {
                 continue;
             }
 
-            if (board.isAvailablePosition(from)) {
-                System.out.println("First position is available! Please choose unavailable one.");
+            if (!board.isValidPosition(to)) {
+                System.out.println("Second position is invalid! Please choose a valid one.");
                 continue;
             }
 
-            if (!board.isValidPosition(to)) {
-                System.out.println("Second position is invalid! Please choose a valid one.");
+            Position positionColour = player.getPiecesColour() == Colour.WHITE ? Position.OCCUPIED_BY_WHITE_PLAYER : Position.OCCUPIED_BY_BLACK_PLAYER;
+            int row = (int) from[1] - ONE_ASCII_CODE;
+            int column = (int) from[0] - A_ASCII_CODE;
+            if (board.getPosition(row, column) != positionColour) {
+                System.out.println("This position is occupied by you. Please choose position occupied by the other player.");
+                continue;
+            }
+
+            if (!player.canFly()) {
+                if (!board.isAdjacentPosition(position)) {
+                    System.out.println("This position is not adjacent! Please choose adjacent position.");
+                    continue;
+                }
+            }
+
+            if (board.isAvailablePosition(from)) {
+                System.out.println("There is no piece on the first position. Please choose a position with a piece to move.");
                 continue;
             }
 
@@ -165,36 +179,6 @@ public class Moves {
             }
 
             board.setBoard(from, Position.AVAILABLE);
-            place(to, player);
-            break;
-        }
-    }
-
-    private void fly(String position, Player player) {
-        while (true) {
-            char[] from = position.substring(0, 2).toCharArray();
-            char[] to = position.substring(2, 4).toCharArray();
-
-            if (!board.isValidPosition(from)) {
-                System.out.println("First position is invalid! Please choose a valid one.");
-                continue;
-            }
-
-            if (!board.isAvailablePosition(from)) {
-                System.out.println("First position is unavailable! Please choose an available one.");
-                continue;
-            }
-
-            if (!board.isValidPosition(to)) {
-                System.out.println("Second position is invalid! Please choose a valid one.");
-                continue;
-            }
-
-            if (!board.isAvailablePosition(to)) {
-                System.out.println("Second position is unavailable! Please choose an available one.");
-                continue;
-            }
-
             place(to, player);
             break;
         }
@@ -210,7 +194,7 @@ public class Moves {
             }
 
             if (board.isAvailablePosition(position)) {
-                System.out.println("This position is available! Please choose an available one.");
+                System.out.println("There is no piece on this position. Please choose a position with a piece to remove.");
                 continue;
             }
 
@@ -260,52 +244,51 @@ public class Moves {
     }
 
     private boolean checkUp(Position position, int row, int column) {
-        int countPieces = 0;
-
+        int countPieces = 1;
         for (int i = 1; 0 <= row - i && row - i < 7; i++) {
             if (board.getPosition(row - i, column) == position) {
                 countPieces++;
             }
         }
 
-        return countPieces == 2;
+        return countPieces == 3;
     }
 
     private boolean checkDown(Position position, int row, int column) {
-        int countPieces = 0;
+        int countPieces = 1;
         for (int i = 1; row + i < 7; i++) {
             if (board.getPosition(row + i, column) == position) {
                 countPieces++;
             }
         }
 
-        return countPieces == 2;
+        return countPieces == 3;
     }
 
     private boolean checkLeft(Position position, int row, int column) {
-        int countPieces = 0;
+        int countPieces = 1;
         for (int i = 1; 0 <= column - i && column - i < 7; i++) {
             if (board.getPosition(row, column - i) == position) {
                 countPieces++;
             }
         }
 
-        return countPieces == 2;
+        return countPieces == 3;
     }
 
     private boolean checkRight(Position position, int row, int column) {
-        int countPieces = 0;
+        int countPieces = 1;
         for (int i = 1; column + i < 7; i++) {
             if (board.getPosition(row, column + i) == position) {
                 countPieces++;
             }
         }
 
-        return countPieces == 2;
+        return countPieces == 3;
     }
 
     private boolean checkUpAndDown(Position position, int row, int column) {
-        int countPieces = 0;
+        int countPieces = 1;
         for (int i = 1; i < 4; i++) {
             if (0 <= row - i && row - i < 4 && board.getPosition(row - i, column) == position) {
                 countPieces++;
@@ -316,11 +299,11 @@ public class Moves {
             }
         }
 
-        return countPieces == 2;
+        return countPieces == 3;
     }
 
     private boolean checkLeftAndRight(Position position, int row, int column) {
-        int countPieces = 0;
+        int countPieces = 1;
         for (int i = 1; i < 4; i++) {
             if (0 <= column - i && column - i < 4 && board.getPosition(row, column - i) == position) {
                 countPieces++;
@@ -331,37 +314,55 @@ public class Moves {
             }
         }
 
-        return countPieces == 2;
+        return countPieces == 3;
     }
 
     private boolean checkMiddleColumn(Position position, int row, int column) {
-        int countPieces = 0;
+        int countUpperPieces = 1;
+        int countBottomPieces = 1;
         for (int i = 1; i < 3; i++) {
             if (0 <= row - i && row - i < 3 && board.getPosition(row - i, column) == position) {
-                countPieces++;
+                countUpperPieces++;
             }
 
-            if (row + i < 3 && board.getPosition(row + i, column) == position) {
-                countPieces++;
+            if (0 <= row + i && row + i < 3 && board.getPosition(row + i, column) == position) {
+                countUpperPieces++;
+            }
+
+            if (4 <= row - i && row - i <= 6 && board.getPosition(row - i, column) == position) {
+                countBottomPieces++;
+            }
+
+            if (4 <= row + i && row + i <= 6 && board.getPosition(row + i, column) == position) {
+                countBottomPieces++;
             }
         }
 
-        return countPieces == 2;
+        return countUpperPieces == 3 || countBottomPieces == 3;
     }
 
     private boolean checkMiddleRow(Position position, int row, int column) {
-        int countPieces = 0;
+        int countLeftPieces = 1;
+        int countRightPieces = 1;
         for (int i = 1; i < 3; i++) {
             if (0 <= column - i && column - i < 3 && board.getPosition(row, column - i) == position) {
-                countPieces++;
+                countLeftPieces++;
             }
 
-            if (column + i < 3 && board.getPosition(row, column + i) == position) {
-                countPieces++;
+            if (0 <= column + i && column + i < 3 && board.getPosition(row, column + i) == position) {
+                countLeftPieces++;
+            }
+
+            if (4 <= column - i && column - i <= 6 && board.getPosition(row, column - i) == position) {
+                countRightPieces++;
+            }
+
+            if (4 <= column + i && column + i <= 6 && board.getPosition(row, column + i) == position) {
+                countRightPieces++;
             }
         }
 
-        return countPieces == 2;
+        return countLeftPieces == 3 || countRightPieces == 3;
     }
 
     private void winner(Player player) {
@@ -377,6 +378,6 @@ public class Moves {
 
         Scanner in = new Scanner(System.in);
 
-        return in.nextLine().toUpperCase();
+        return in.nextLine().toUpperCase().strip();
     }
 }

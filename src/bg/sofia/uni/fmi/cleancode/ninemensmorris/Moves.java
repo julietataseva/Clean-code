@@ -6,11 +6,9 @@ import bg.sofia.uni.fmi.cleancode.ninemensmorris.enums.Position;
 
 import java.util.Scanner;
 
-import static bg.sofia.uni.fmi.cleancode.ninemensmorris.constants.Constants.A_ASCII_CODE;
-import static bg.sofia.uni.fmi.cleancode.ninemensmorris.constants.Constants.ONE_ASCII_CODE;
+import static bg.sofia.uni.fmi.cleancode.ninemensmorris.constants.Constants.*;
 
 public class Moves {
-
     private Board board;
     private Player firstPlayer;
     private Player secondPlayer;
@@ -77,14 +75,14 @@ public class Moves {
             movePiece(firstPlayer);
 
             if (secondPlayer.getPiecesOnBoard() < 3) {
-                winner(firstPlayer);
+                return;
             }
 
             System.out.println(secondPlayer.getPiecesColour() + " player turn.");
             movePiece(secondPlayer);
 
             if (firstPlayer.getPiecesOnBoard() < 3) {
-                winner(secondPlayer);
+                return;
             }
         }
     }
@@ -222,21 +220,21 @@ public class Moves {
 
         Position positionColour = playerColour == Colour.WHITE ? Position.OCCUPIED_BY_WHITE_PLAYER : Position.OCCUPIED_BY_BLACK_PLAYER;
 
-        if (column != 3 && checkUp(positionColour, row, column)) {
+        if (column != MIDDLE_COLUMN && checkUp(positionColour, row, column)) {
             return true;
-        } else if (column != 3 && checkDown(positionColour, row, column)) {
+        } else if (column != MIDDLE_COLUMN && checkDown(positionColour, row, column)) {
             return true;
-        } else if (row != 3 && checkLeft(positionColour, row, column)) {
+        } else if (row != MIDDLE_ROW && checkLeft(positionColour, row, column)) {
             return true;
-        } else if (row != 3 && checkRight(positionColour, row, column)) {
+        } else if (row != MIDDLE_ROW && checkRight(positionColour, row, column)) {
             return true;
-        } else if (column != 3 && checkUpAndDown(positionColour, row, column)) {
+        } else if (column != MIDDLE_COLUMN && checkUpAndDown(positionColour, row, column)) {
             return true;
-        } else if (row != 3 && checkLeftAndRight(positionColour, row, column)) {
+        } else if (row != MIDDLE_ROW && checkLeftAndRight(positionColour, row, column)) {
             return true;
-        } else if (row == 3 && checkMiddleRow(positionColour, row, column)) {
+        } else if (row == MIDDLE_ROW && checkMiddleRow(positionColour, row, column)) {
             return true;
-        } else if (column == 3 && checkMiddleColumn(positionColour, row, column)) {
+        } else if (column == MIDDLE_COLUMN && checkMiddleColumn(positionColour, row, column)) {
             return true;
         }
 
@@ -245,128 +243,129 @@ public class Moves {
 
     private boolean checkUp(Position position, int row, int column) {
         int countPieces = 1;
-        for (int i = 1; 0 <= row - i && row - i < 7; i++) {
+        for (int i = 1; 0 <= row - i && row - i < BOARD_SIZE; i++) {
             if (board.getPosition(row - i, column) == position) {
                 countPieces++;
             }
         }
 
-        return countPieces == 3;
+        return countPieces == MILL_SIZE;
     }
 
     private boolean checkDown(Position position, int row, int column) {
         int countPieces = 1;
-        for (int i = 1; row + i < 7; i++) {
+        for (int i = 1; row + i < BOARD_SIZE; i++) {
             if (board.getPosition(row + i, column) == position) {
                 countPieces++;
             }
         }
 
-        return countPieces == 3;
+        return countPieces == MILL_SIZE;
     }
 
     private boolean checkLeft(Position position, int row, int column) {
         int countPieces = 1;
-        for (int i = 1; 0 <= column - i && column - i < 7; i++) {
+        for (int i = 1; 0 <= column - i && column - i < BOARD_SIZE; i++) {
             if (board.getPosition(row, column - i) == position) {
                 countPieces++;
             }
         }
 
-        return countPieces == 3;
+        return countPieces == MILL_SIZE;
     }
 
     private boolean checkRight(Position position, int row, int column) {
         int countPieces = 1;
-        for (int i = 1; column + i < 7; i++) {
+        for (int i = 1; column + i < BOARD_SIZE; i++) {
             if (board.getPosition(row, column + i) == position) {
                 countPieces++;
             }
         }
 
-        return countPieces == 3;
+        return countPieces == MILL_SIZE;
     }
 
     private boolean checkUpAndDown(Position position, int row, int column) {
         int countPieces = 1;
-        for (int i = 1; i < 4; i++) {
-            if (0 <= row - i && row - i < 4 && board.getPosition(row - i, column) == position) {
+        for (int i = 1; i <= BOARD_SIZE / 2; i++) {
+            if (0 <= row - i && row - i <= BOARD_SIZE / 2 && board.getPosition(row - i, column) == position) {
                 countPieces++;
             }
 
-            if (row + i < 4 && board.getPosition(row + i, column) == position) {
+            if (row + i <= BOARD_SIZE / 2 && board.getPosition(row + i, column) == position) {
                 countPieces++;
             }
         }
 
-        return countPieces == 3;
+        return countPieces == MILL_SIZE;
     }
 
     private boolean checkLeftAndRight(Position position, int row, int column) {
         int countPieces = 1;
-        for (int i = 1; i < 4; i++) {
-            if (0 <= column - i && column - i < 4 && board.getPosition(row, column - i) == position) {
+        for (int i = 1; i <= BOARD_SIZE / 2; i++) {
+            if (0 <= column - i && column - i <= BOARD_SIZE / 2 && board.getPosition(row, column - i) == position) {
                 countPieces++;
             }
 
-            if (column + i < 4 && board.getPosition(row, column + i) == position) {
+            if (column + i <= BOARD_SIZE / 2 && board.getPosition(row, column + i) == position) {
                 countPieces++;
             }
         }
 
-        return countPieces == 3;
+        return countPieces == MILL_SIZE;
     }
 
     private boolean checkMiddleColumn(Position position, int row, int column) {
         int countUpperPieces = 1;
         int countBottomPieces = 1;
-        for (int i = 1; i < 3; i++) {
-            if (0 <= row - i && row - i < 3 && board.getPosition(row - i, column) == position) {
+        for (int i = 1; i < BOARD_SIZE / 2; i++) {
+            if (0 <= row - i && row - i < BOARD_SIZE / 2 && board.getPosition(row - i, column) == position) {
                 countUpperPieces++;
             }
 
-            if (0 <= row + i && row + i < 3 && board.getPosition(row + i, column) == position) {
+            if (0 <= row + i && row + i < BOARD_SIZE / 2 && board.getPosition(row + i, column) == position) {
                 countUpperPieces++;
             }
 
-            if (4 <= row - i && row - i <= 6 && board.getPosition(row - i, column) == position) {
+            if (BOARD_SIZE / 2 + 1 <= row - i && row - i < BOARD_SIZE && board.getPosition(row - i, column) == position) {
                 countBottomPieces++;
             }
 
-            if (4 <= row + i && row + i <= 6 && board.getPosition(row + i, column) == position) {
+            if (BOARD_SIZE / 2 + 1 <= row + i && row + i < BOARD_SIZE && board.getPosition(row + i, column) == position) {
                 countBottomPieces++;
             }
         }
 
-        return countUpperPieces == 3 || countBottomPieces == 3;
+        return countUpperPieces == MILL_SIZE || countBottomPieces == MILL_SIZE;
     }
 
     private boolean checkMiddleRow(Position position, int row, int column) {
         int countLeftPieces = 1;
         int countRightPieces = 1;
         for (int i = 1; i < 3; i++) {
-            if (0 <= column - i && column - i < 3 && board.getPosition(row, column - i) == position) {
+            if (0 <= column - i && column - i < BOARD_SIZE / 2 && board.getPosition(row, column - i) == position) {
                 countLeftPieces++;
             }
 
-            if (0 <= column + i && column + i < 3 && board.getPosition(row, column + i) == position) {
+            if (0 <= column + i && column + i < BOARD_SIZE / 2 && board.getPosition(row, column + i) == position) {
                 countLeftPieces++;
             }
 
-            if (4 <= column - i && column - i <= 6 && board.getPosition(row, column - i) == position) {
+            if (BOARD_SIZE / 2 + 1 <= column - i && column - i < BOARD_SIZE && board.getPosition(row, column - i) == position) {
                 countRightPieces++;
             }
 
-            if (4 <= column + i && column + i <= 6 && board.getPosition(row, column + i) == position) {
+            if (BOARD_SIZE / 2 + 1 <= column + i && column + i < BOARD_SIZE && board.getPosition(row, column + i) == position) {
                 countRightPieces++;
             }
         }
 
-        return countLeftPieces == 3 || countRightPieces == 3;
+        return countLeftPieces == MILL_SIZE || countRightPieces == MILL_SIZE;
     }
 
-    private void winner(Player player) {
-        System.out.println("The winner is the " + player.getPiecesColour() + " player!");
+    public void printWinner() {
+        Player winner = firstPlayer.getPiecesOnBoard() < 3 ? firstPlayer : secondPlayer;
+        System.out.println("The winner is the " + winner.getPiecesColour() + " player!");
     }
 
     private Player chooseFirstPlayer(Player whitePlayer, Player blackPlayer) {
@@ -375,9 +374,7 @@ public class Moves {
 
     private String enterPosition() {
         System.out.println("Enter a position: ");
-
         Scanner in = new Scanner(System.in);
-
         return in.nextLine().toUpperCase().strip();
     }
 }

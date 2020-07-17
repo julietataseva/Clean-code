@@ -13,5 +13,6 @@ public class Game {
         moves.placingPieces();
         moves.movingPieces();
         moves.flying();
+        moves.printWinner();
     }
 }

@@ -6,12 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static bg.sofia.uni.fmi.cleancode.ninemensmorris.constants.Constants.A_ASCII_CODE;
-import static bg.sofia.uni.fmi.cleancode.ninemensmorris.constants.Constants.ONE_ASCII_CODE;
+import static bg.sofia.uni.fmi.cleancode.ninemensmorris.constants.Constants.*;
 
 public class Board {
-    private final int BOARD_SIZE = 7;
-
     private Position[][] board;
     private Map<String, List<String>> neighbours;
 
@@ -62,10 +59,6 @@ public class Board {
         neighbours.put("A7", List.of("A4", "D7"));
         neighbours.put("D7", List.of("A7", "D6", "G7"));
         neighbours.put("G7", List.of("G4", "D7"));
-    }
-
-    public int positionValue(int row, int column) {
-        return board[row][column].getValue();
     }
 
     public Position getPosition(int row, int column) {
@@ -122,9 +115,5 @@ public class Board {
         int column = (int) position[0] - A_ASCII_CODE;
 
         board[row][column] = value;
-    }
-
-    public Map<String, List<String>> getNeighbours() {
-        return neighbours;
     }
 }

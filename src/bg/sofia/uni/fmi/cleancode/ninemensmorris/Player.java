@@ -2,9 +2,9 @@ package bg.sofia.uni.fmi.cleancode.ninemensmorris;
 
 import bg.sofia.uni.fmi.cleancode.ninemensmorris.enums.Colour;
 
-public class Player {
-    private final int MAX_PIECES = 9;
+import static bg.sofia.uni.fmi.cleancode.ninemensmorris.constants.Constants.MAX_PIECES;
 
+public class Player {
     private int unplacedPieces;
     private int piecesOnBoard;
     private Colour piecesColour;
